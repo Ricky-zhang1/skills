@@ -12,6 +12,40 @@ Mplus自动化分析skill 想把这些重复又容易出错的步骤连起来。
 
 当前标准流程覆盖 EFA、CFA、SEM、观测变量或潜变量中介、基础线性增长、LPA 和 LCA。对于测量不变性、多层模型、增长混合模型、LTA、RI-CLPM、ESEM 和复杂抽样等更复杂的任务，Skill 会提示它们仍属于引导或专家路径，不会把尚未验证的自动代码包装成可靠结论。
 
+### 安装教程
+
+先在本页右上角选择 `Code`，再选择 `Download ZIP`。解压后，请完整保留 `mplus-automated-analysis-skill` 文件夹，不能只复制其中的 `SKILL.md`。
+
+对于 Codex，可以把整个文件夹放入 `~/.codex/skills/`，随后重启 Codex。也可以直接告诉 Codex 从 GitHub 安装这个仓库中的 `mplus-automated-analysis-skill` 文件夹。
+
+对于 Claude Code，可以把整个文件夹放入 `~/.claude/skills/`，随后重启 Claude Code。
+
+对于其他支持 Skill 或插件的 Agent，请使用该平台的导入入口，导入整个文件夹，并确认平台能够读取其中的 `SKILL.md`、`references`、`runtime`、`scripts` 和 `assets`。
+
+Mplus 需要用户自行合法安装。这个 Skill 不需要 MCP Server。它会在第一次运行时检查 Python 和数据读取依赖，并在缺少依赖时先征求同意，再只为自己创建独立运行环境。
+
+### 第一次运行
+
+安装完成后，先把下面这句话交给 Agent。
+
+> 请先检测本机的 Mplus 和运行环境，并完成一次本机自检。
+
+Agent 会先自动寻找 Mplus。只有自动检测失败时，才会询问安装位置。若你需要手动运行检测命令，可以使用下面两种方式。
+
+macOS
+
+```bash
+./scripts/运行Mplus分析.sh doctor
+```
+
+Windows PowerShell
+
+```powershell
+.\scripts\运行Mplus分析.ps1 doctor
+```
+
+环境就绪后，建议先运行一次 `self-test`。自检通过只说明这台电脑上的 Mplus、数据转换、代码运行和关键结果解析能够正常衔接。它不代表任何真实数据天然适合某个模型。
+
 ### 使用方式
 
 把数据文件和研究问题直接交给 Agent。它支持 SAV、Excel、CSV、DTA、TXT 和 DAT。
@@ -45,6 +79,40 @@ How do I export a SAV file. How do I turn TXT into a CSV that Excel can open. Wh
 Mplus Automated Analysis Skill connects those steps. Give an Agent a dataset and a research question. It can inspect variables and missing values, convert data into an Mplus-ready format, select a controlled workflow, generate syntax, call the local Mplus installation, preserve raw output, and export Excel files, CSV files, a Chinese report, and methodological references.
 
 The current standard workflow covers EFA, CFA, SEM, observed or latent mediation, basic linear growth, LPA, and LCA. Measurement invariance, multilevel models, growth mixture models, LTA, RI-CLPM, ESEM, and complex survey analysis remain guided or expert paths. The Skill should state those limits clearly.
+
+### Installation
+
+Select `Code` near the top of this page and choose `Download ZIP`. After extracting the archive, keep the complete `mplus-automated-analysis-skill` folder together. Do not copy `SKILL.md` by itself.
+
+For Codex, place the folder in `~/.codex/skills/` and restart Codex. You can also ask Codex to install the `mplus-automated-analysis-skill` folder from this GitHub repository.
+
+For Claude Code, place the complete folder in `~/.claude/skills/` and restart Claude Code.
+
+For other Agents with a Skill or plugin import feature, import the whole folder and make sure the platform can read `SKILL.md`, `references`, `runtime`, `scripts`, and `assets`.
+
+Users need their own legally installed Mplus. This Skill does not require an MCP Server. On first use, it checks Python and data-reading dependencies. When setup is needed, it asks for permission before creating an isolated environment for itself.
+
+### First run
+
+Tell the Agent this after installation.
+
+> Please detect the local Mplus installation and runtime environment, then complete a local self-test.
+
+The Agent tries to find Mplus automatically and asks for the installation path only when automatic discovery fails. These are the manual diagnostic commands when needed.
+
+macOS
+
+```bash
+./scripts/运行Mplus分析.sh doctor
+```
+
+Windows PowerShell
+
+```powershell
+.\scripts\运行Mplus分析.ps1 doctor
+```
+
+A successful self-test confirms that the local Mplus installation, data conversion, syntax execution, and key output parsing can work together. It does not establish that a real dataset is appropriate for a particular model.
 
 ### How to use it
 
