@@ -1,0 +1,185 @@
+registry_name: Mplus分析来源登记
+version: 0.2.0
+last_verified: 2026-08-10
+policy:
+  authority_order:
+  - Mplus官方用户手册与官方示例
+  - Mplus官方Web Notes与专题资料
+  - 同行评议的方法论文与权威手册章节
+  - 成熟开源工程实现
+  note: GitHub工程只能用于自动化实现参考，不能单独作为统计规范依据。
+sources:
+- id: MPLUS-HOME-9.1
+  level: 官方
+  title: Mplus Version 9.1 / Mplus Home Page
+  url: https://www.statmodel.com/
+  use_for:
+  - 当前版本识别
+  - 功能范围
+  checked: 2026-08-10
+- id: MPLUS-UG-CH3
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 3 Regression and Path Analysis
+  url: https://www.statmodel.com/usersguide/chapter3.shtml
+  use_for:
+  - 回归
+  - 路径分析
+  - 中介效应
+  - Bootstrap间接效应候选模板
+  checked: '2026-08-10'
+- id: MPLUS-UG-CH4
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 4 Exploratory Factor Analysis
+  url: https://www.statmodel.com/usersguide/chapter4.shtml
+  use_for:
+  - EFA
+  - EFA分类指标
+  - 后续ESEM相关模板来源
+  checked: '2026-08-10'
+- id: MPLUS-RICLPM
+  level: 官方专题
+  title: Mplus Special Topic - Random Intercept Cross-Lagged Panel Models
+  url: https://www.statmodel.com/RI-CLPM.shtml
+  use_for:
+  - RI-CLPM候选模板
+  - 版本特异语法核验
+  checked: '2026-08-10'
+- id: MPLUS-UG-CH5
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 5 CFA and SEM
+  url: https://www.statmodel.com/usersguide/chapter5.shtml
+  use_for:
+  - CFA
+  - SEM
+  - 间接效应模型候选模板
+  checked: 2026-08-10
+- id: MPLUS-UG-CH6
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 6 Growth Modeling
+  url: https://www.statmodel.com/usersguide/chapter6.shtml
+  use_for:
+  - 潜在增长曲线模型候选模板
+  checked: 2026-08-10
+- id: MPLUS-UG-CH8
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 8 Mixture Modeling with Longitudinal
+    Data
+  url: https://www.statmodel.com/usersguide/chapter8.shtml
+  use_for:
+  - 增长混合模型候选模板
+  - LTA/GMM后续模块
+  checked: 2026-08-10
+- id: MPLUS-UG-CH9
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 9 Multilevel Modeling
+  url: https://www.statmodel.com/usersguide/chapter9.shtml
+  use_for:
+  - 多层模型候选模板
+  - 两层CFA/SEM
+  checked: 2026-08-10
+- id: MPLUS-UG-CH7
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 7 Mixture Modeling with Cross-Sectional
+    Data
+  url: https://www.statmodel.com/usersguide/chapter7.shtml
+  use_for:
+  - LPA/LCA模型模板来源
+  - mixture模型示例目录
+  checked: 2026-08-10
+- id: MPLUS-EX7.9
+  level: 官方
+  title: Example 7.9 - Continuous latent class indicators with automatic random starts
+  url: https://www.statmodel.com/usersguide/chap7/ex7.9.html
+  use_for:
+  - LPA基础模型结构
+  - 连续指标
+  - TYPE=MIXTURE
+  - 默认类内零协方差
+  - 方差跨类相等的基础参数化
+  - loglikelihood重复检查
+  checked: 2026-08-10
+- id: MPLUS-EX7.10
+  level: 官方
+  title: Example 7.10 - Continuous indicators with class-specific variances
+  url: https://www.statmodel.com/usersguide/chap7/ex7.10.html
+  use_for:
+  - LPA类别特异方差扩展模型
+  checked: 2026-08-10
+- id: MPLUS-EX7.22
+  level: 官方
+  title: Example 7.22 - Mixture modeling with continuous variables that correlate
+    within class
+  url: https://www.statmodel.com/usersguide/chapter7.shtml
+  use_for:
+  - LPA类内残差相关扩展模型
+  checked: 2026-08-10
+- id: MPLUS-WN14
+  level: 官方方法
+  title: Asparouhov & Muthén (2012) Using Mplus TECH11 and TECH14 to test the number
+    of latent classes
+  url: https://www.statmodel.com/examples/webnote.shtml
+  use_for:
+  - TECH11
+  - TECH14
+  - 随机起始值与BLRT稳定性流程
+  checked: 2026-08-10
+- id: MPLUS-LANGUAGE
+  level: 官方
+  title: A summary of the Mplus language
+  url: https://www.statmodel.com/language.html
+  use_for:
+  - STARTS
+  - STITERATIONS
+  - LRTSTARTS
+  - Mplus语法参数
+  checked: 2026-08-10
+- id: MPLUS-UG-TECH14
+  level: 官方
+  title: Mplus User's Guide language reference - TECH14 and LRTSTARTS recommendations
+  url: https://www.statmodel.com/HTML_UG/chapter18V8.htm
+  use_for:
+  - TECH14两阶段运行策略
+  - LRTSTARTS
+  - OPTSEED
+  checked: 2026-08-10
+- id: MPLUS-SAVEDATA
+  level: 官方支持资料
+  title: Mplus SAVEDATA / CPROBABILITIES guidance
+  url: https://www.statmodel.com/discussion/messages/14/4056.html
+  use_for:
+  - CPROBABILITIES
+  - IDVARIABLE
+  - SAVEDATA读取注意事项
+  checked: 2026-08-10
+- id: NYLUND-2007
+  level: 方法论文
+  title: Nylund, Asparouhov & Muthén (2007) Deciding on the Number of Classes in Latent
+    Class Analysis and Growth Mixture Modeling
+  doi: 10.1080/10705510701575396
+  url: https://doi.org/10.1080/10705510701575396
+  use_for:
+  - 类别数选择
+  - 信息准则与BLRT比较
+  - 不依赖单一类别数指标
+  checked: 2026-08-10
+- id: MASYN-2013
+  level: 权威手册章节
+  title: Masyn (2013) Latent Class Analysis and Finite Mixture Modeling
+  doi: 10.1093/oxfordhb/9780199934898.013.0025
+  url: https://doi.org/10.1093/oxfordhb/9780199934898.013.0025
+  use_for:
+  - LPA/LCA模型假设
+  - 模型评估与解释
+  - 应用规范
+  checked: 2026-08-10
+- id: MPLUSAUTOMATION
+  level: 工程参考
+  title: MplusAutomation
+  url: https://github.com/michaelhallquist/MplusAutomation
+  use_for:
+  - Mplus命令行调用
+  - 批量运行
+  - 输出解析工程思路
+  - SAVEDATA解析工程思路
+  restriction: 不作为统计模型规范的独立依据
+  checked: 2026-08-10

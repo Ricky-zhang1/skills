@@ -1,0 +1,4 @@
+interface:
+  display_name: Mplus 分析
+  short_description: 用受控流程完成可审计的 Mplus 分析
+  default_prompt: 请先识别我的研究问题和变量类型，选择合适的 Mplus 分析家族，完成数据检查、代码生成、运行、结果导出、质量审查、中文报告和参考依据。

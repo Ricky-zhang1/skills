@@ -1,0 +1,76 @@
+registry_name: Mplus分析规则登记
+version: 0.2.0
+rules:
+  - id: LPA-HARD-001
+    type: hard_gate
+    rule: 标准LPA指标必须为数值型连续变量；发现分类指标时阻止套用LPA基础模板。
+    sources: [MPLUS-EX7.9, MASYN-2013]
+
+  - id: DATA-HARD-001
+    type: hard_gate
+    rule: 数据转换前后记录数必须一致，除非分析设计清单明确记录了筛选规则。
+    sources: []
+    origin: 软件质量规则
+
+  - id: DATA-HARD-002
+    type: hard_gate
+    rule: Mplus内部变量顺序必须与NAMES语句完全一致，并通过变量对应表回查。
+    sources: [MPLUS-LANGUAGE]
+
+  - id: LPA-HARD-002
+    type: hard_gate
+    rule: K>=2的混合模型必须正常结束且最佳loglikelihood被重复获得；否则不得进入最终类别数比较。
+    sources: [MPLUS-EX7.9, MPLUS-WN14]
+
+  - id: MPLUS-HARD-001
+    type: hard_gate
+    rule: 输出中存在*** ERROR或未正常终止时禁止生成论文式结论。
+    sources: []
+    origin: 软件质量规则
+
+  - id: LPA-WARN-001
+    type: warning
+    rule: TECH14出现局部最优、bootstrap draw未收敛或p值可信度警告时，将TECH14标记为不可用证据。
+    sources: [MPLUS-WN14, MPLUS-UG-TECH14]
+
+  - id: LPA-START-001
+    type: workflow_policy
+    rule: 随机起始值采用逐级升级而非固定“神奇数字”：screening -> verification -> difficult；每一级都要求检查最佳loglikelihood重复。
+    sources: [MPLUS-EX7.9, MPLUS-WN14]
+    note: 各级具体数值是本Skill的工程策略，不宣称为文献统一阈值。
+    tiers:
+      screening: [200, 40]
+      verification: [1000, 200]
+      difficult: [5000, 1000]
+
+  - id: LPA-SELECT-001
+    type: selection
+    rule: 类别数不能由单一指标决定；先检查模型稳定性，再综合信息准则、似然比检验、分类质量、类别规模和实质解释。
+    sources: [NYLUND-2007, MASYN-2013, MPLUS-WN14]
+
+  - id: LPA-SELECT-002
+    type: selection
+    rule: BIC作为主要候选证据之一，但不得机械地把最低BIC等同于最终真值；与模型解释和其他证据综合判断。
+    sources: [NYLUND-2007, MASYN-2013]
+
+  - id: LPA-SELECT-003
+    type: selection
+    rule: Entropy反映分类清晰程度，不作为类别数选择的唯一标准。
+    sources: [NYLUND-2007, MASYN-2013]
+
+  - id: LPA-SELECT-004
+    type: heuristic
+    rule: 最小类别占比低于5%时给出“小类别”提示；低于1%时给出严重提示，但不自动否决模型。
+    sources: []
+    origin: 本Skill内部启发式提示
+    note: 该阈值仅作应用层提醒，不标记为公认硬标准，也不用于自动否决模型。
+
+  - id: LPA-SELECT-005
+    type: selection
+    rule: 当BIC、TECH11/TECH14、类别规模与可解释性明显冲突时，自动结论应为“证据不一致”，禁止强行输出唯一类别数。
+    sources: [NYLUND-2007, MASYN-2013]
+
+  - id: DATA-POLICY-001
+    type: workflow_policy
+    rule: 不默认Z标准化LPA指标。只有用户授权或研究设计明确要求时才标准化，并记录转换前后的变量映射与统计量。
+    sources: [MASYN-2013]

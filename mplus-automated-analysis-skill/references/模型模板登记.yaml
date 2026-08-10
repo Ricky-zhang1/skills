@@ -1,0 +1,164 @@
+registry_name: Mplus LPA模板与结构化编译来源登记
+version: 0.3.0-alpha.9
+policy:
+  scope: LPA使用本登记中的受控模板；EFA、CFA、SEM、中介、增长和LCA由Runtime结构化编译器受控生成，运行时真值源为支持矩阵与COMPILED_FAMILIES。
+  standard_mode_requirement: 所有标准模块都必须经过结构化输入校验、Mplus运行后反校验和本机环境验证；未在支持矩阵列为已接入的模型不得作为自动分析交付。
+  beta_policy: 当前为alpha阶段。除明确的未自检试运行外，标准运行需要本机自检凭证；试运行结果不得直接作为正式研究结论。
+templates:
+- id: LPA-BASE-EV0
+  中文名称: LPA基础模型_等方差_类内零协方差
+  analysis: LPA
+  status: release-candidate
+  runtime_test_status: passed-one-development-environment
+  tested_matrix:
+  - os: macOS
+    arch: arm64
+    mplus: "8.3"
+  source_ids:
+  - MPLUS-EX7.9
+  - MPLUS-WN14
+  - NYLUND-2007
+  - MASYN-2013
+  indicator_types:
+  - continuous
+  covariance_within_class: fixed_zero
+  variances_across_classes: equal
+  means_across_classes: free
+  estimator: MLR
+  allowed_parameters:
+  - class_count
+  - indicator_variables
+  - id_variable
+  - missing_code
+  - random_starts
+  - stiterations
+  - optseed
+  - lrtstarts
+  - processors
+  forbidden_mutations:
+  - 添加指标间WITH语句
+  - 把方差改为类别特异而不切换模板
+  - 添加协变量或远端结果变量
+  - 更换估计量而不进入专家模式
+  template_file: assets/templates/LPA_基础模型.inp.tmpl
+- id: LPA-VV-EV0
+  中文名称: LPA扩展模型_类别特异方差_类内零协方差
+  analysis: LPA
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-EX7.10
+  - MASYN-2013
+  indicator_types:
+  - continuous
+  covariance_within_class: fixed_zero
+  variances_across_classes: class_specific
+  note: 不作为当前自动默认模型；需完成官方样例回归测试后认证。
+- id: LPA-BASE-COV
+  中文名称: LPA扩展模型_允许类内指标相关
+  analysis: LPA
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-EX7.22
+  - MASYN-2013
+  note: 用于局部独立假设明显不合理等情形；不得为追求更低BIC自动释放大量协方差。
+- id: LCA-BINARY
+  中文名称: 二分类指标LCA
+  analysis: LCA
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-UG-CH7
+  official_example: Example 7.3
+- id: CFA-CONTINUOUS
+  中文名称: 连续指标验证性因子分析
+  analysis: CFA
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 5
+  official_example: Example 5.1
+- id: CFA-CATEGORICAL
+  中文名称: 分类指标验证性因子分析
+  analysis: CFA
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 5
+  official_example: Example 5.2
+- id: SEM-GENERAL
+  中文名称: 一般结构方程模型
+  analysis: SEM
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Examples
+- id: PATH-REGRESSION
+  中文名称: 路径分析与回归
+  analysis: PATH
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 3
+  source_ids:
+  - MPLUS-UG-CH3
+- id: LGCM-CONTINUOUS
+  中文名称: 连续变量潜在增长曲线模型
+  analysis: LGCM
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 6
+- id: GMM-CONTINUOUS
+  中文名称: 连续结果增长混合模型
+  analysis: GMM
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 8
+  official_example: Example 8.1
+- id: MULTILEVEL-SEM
+  中文名称: 两层结构方程模型
+  analysis: MULTILEVEL_SEM
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus User's Guide Chapter 9
+- id: RI-CLPM
+  中文名称: 随机截距交叉滞后模型
+  analysis: RI_CLPM
+  status: candidate
+  runtime_test_status: not_started
+  official_source: Mplus Special Topics - RI-CLPM
+  source_ids:
+  - MPLUS-RICLPM
+- id: PATH-CONTINUOUS
+  中文名称: 连续结果路径分析
+  analysis: PATH
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-UG-CH3
+  official_example: Example 3.11
+  template_file: assets/templates/候选/路径分析_连续结果_候选.inp.tmpl
+- id: MEDIATION-CONT-BOOT
+  中文名称: 连续结果Bootstrap中介效应
+  analysis: MEDIATION
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-UG-CH3
+  official_example: Example 3.16
+  template_file: assets/templates/候选/路径中介_连续结果_自助法_候选.inp.tmpl
+- id: EFA-CONTINUOUS
+  中文名称: 连续指标探索性因子分析
+  analysis: EFA
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-UG-CH4
+  official_example: Example 4.1 part 1
+  template_file: assets/templates/候选/EFA_连续指标_候选.inp.tmpl
+- id: CFA-MULTIGROUP-CONT
+  中文名称: 连续指标多组CFA与测量不变性基础骨架
+  analysis: CFA_MULTIGROUP
+  status: candidate
+  runtime_test_status: not_started
+  source_ids:
+  - MPLUS-UG-CH5
+  note: 测量不变性不是单一模板；配置/载荷/截距等约束必须由独立规则集生成并逐步比较。
+  template_file: assets/templates/候选/多组CFA_连续指标_候选.inp.tmpl

@@ -1,0 +1,109 @@
+registry_name: Mplus模板测试登记
+version: 0.3.0-alpha.9
+tests:
+- id: TEST-LPA-001
+  template: LPA-BASE-EV0
+  type: source_structure_test
+  status: passed
+  expected:
+    indicator_type: continuous
+    estimator: MLR
+    covariance_within_class: fixed_zero
+    variances_across_classes: equal
+  source: MPLUS-EX7.9
+- id: TEST-LPA-002
+  template: LPA-BASE-EV0
+  type: code_generation_unit_test
+  status: passed
+  test_file: tests/test_lpa_codegen.py
+- id: TEST-LPA-003
+  template: LPA-BASE-EV0
+  type: output_parser_unit_test
+  status: passed
+  test_file: tests/test_parser.py
+- id: TEST-LPA-004
+  template: LPA-BASE-EV0
+  type: real_mplus_windows
+  status: pending-not-current-release-blocker
+  required_versions:
+  - 8.x
+  - '9.1'
+- id: TEST-LPA-005
+  template: LPA-BASE-EV0
+  type: real_mplus_macos
+  status: partial
+  required_arch:
+  - x86_64
+  - arm64
+  passed_matrix:
+  - os: macOS
+    arch: arm64
+    mplus_executable_arch: x86_64
+    execution: Rosetta
+    mplus: "8.3"
+    date: "2026-08-10"
+- id: TEST-LPA-006
+  template: LPA-BASE-EV0
+  type: data_conversion_unit_test
+  status: passed
+  test_file: tests/test_data_prepare.py
+- id: TEST-LPA-007
+  template: LPA-BASE-EV0
+  type: template_mutation_guard_test
+  status: passed
+  test_file: tests/test_lpa_codegen.py
+- id: TEST-LPA-008
+  template: LPA-BASE-EV0
+  type: model_selection_logic_test
+  status: passed
+  test_file: tests/test_selection.py
+- id: TEST-LPA-009
+  template: LPA-BASE-EV0
+  type: programmatic_review_test
+  status: passed
+  test_file: tests/test_review.py
+release_gate:
+  certified_requires:
+  - source_structure_test=passed
+  - code_generation_unit_test=passed
+  - output_parser_unit_test=passed
+  - real_mplus_macos_apple_silicon=passed
+  platform_policy: Windows 与 macOS Intel 在无实机阶段只能发布为未实机验证的试验性兼容包，不得纳入 Mac M 系列正式认证结论。
+multi_family_regressions:
+- id: TEST-NETWORK-TEMPLATES-ALPHA5
+  analysis: MULTI_FAMILY
+  status: passed-with-documented-source-fixture-failures
+  templates_run: 24
+  templates_normal: 18
+  skill_workflows: 11
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+- id: TEST-CFA-CONT-001
+  analysis: CFA
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-CFA-CAT-001
+  analysis: CFA_CATEGORICAL
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-EFA-CONT-001
+  analysis: EFA
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-SEM-CONT-001
+  analysis: SEM
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-MEDIATION-BOOT-001
+  analysis: MEDIATION
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-GROWTH-CONT-001
+  analysis: GROWTH
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-LCA-COMPARE-001
+  analysis: LCA
+  status: passed-one-development-environment
+  classes: [1, 2, 3, 4]
+  expected_candidate: 3
+  matrix: {os: macOS, arch: arm64, mplus: "8.3"}

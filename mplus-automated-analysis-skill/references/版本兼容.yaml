@@ -1,0 +1,57 @@
+registry_name: Mplus版本适配登记
+version: 0.3.0-alpha.9
+last_checked: 2026-08-10
+official_current_version: "9.1"
+principle: 核心标准模板固定使用 Mplus 7+ 的共同语法；版本专属功能只在检测到满足版本后进入引导或专家路径，绝不静默写入旧版代码。
+profiles:
+  v7:
+    range: "7.x"
+    runtime_status: best_effort
+    parser: legacy-compatible
+    core: [EFA, CFA, SEM, mediation, linear-growth, LPA, LCA]
+    notes: 不依赖部分 7.x 安装中缺失的分类 logits 或后续版本新增输出；高级三步法、BCH、LTA 等须逐个核对小版本与官方示例。
+  v8_0_8_3:
+    range: "8.0-8.3"
+    runtime_status: target_on_macos_arm64_self_test_required
+    parser: v8-compatible
+    core: [EFA, CFA, SEM, mediation, linear-growth, LPA, LCA]
+    notes: 当前实机记录为 macOS Apple Silicon 加 8.3；RDSEM 和时间序列功能不进入标准模式。
+  v8_4_8_8:
+    range: "8.4-8.8"
+    runtime_status: provisional_self_test_required
+    parser: v8-compatible
+    notes: 8.4 起多潜类别变量 mixture 输出简化；当前单一 LPA/LCA 解析不依赖该布局。8.7 起 RI-CLPM 残差回归等仍为引导模块。
+  v8_9_8_11:
+    range: "8.9-8.11"
+    runtime_status: provisional_self_test_required
+    parser: v8-compatible
+    notes: 自动纵向不变性、PSEM、扩展 ALIGNMENT/DSEM/SAVEDATA 可用，但本 Skill 不自动生成这些版本专属语法。
+  v9_0:
+    range: "9.0"
+    runtime_status: provisional_self_test_required
+    parser: v9-compatible
+    notes: 多步 mixture、两层 Bootstrap、PSEM 扩展、VIF 等可用；仍只作为引导或专家功能。
+  v9_1:
+    range: "9.1"
+    runtime_status: target_on_macos_arm64_self_test_required
+    parser: v9.1-compatible
+    notes: SEFA/DSEFA 和新版并列 ESEM 输出可用；当前 ESEM 尚未自动交付，解析器不把新输出误当成普通 EFA。
+  future:
+    range: ">=10"
+    runtime_status: unverified
+    parser: broad-compatible
+    notes: 可使用通用核心模板并强制保留版本提示；新语法和新输出需先以官方示例自检。
+  legacy:
+    range: "<=6.x"
+    runtime_status: unsupported_by_default
+    parser: not-guaranteed
+    notes: 不进入标准自动运行；仅在专家确认下保留原始输出和手工复核。
+official_sources:
+  - title: Mplus Version History
+    url: https://www.statmodel.com/verhistory.shtml
+  - title: Version 8.9-8.11 Language Addendum
+    url: https://www.statmodel.com/download/Version%208.9%208.10%20and%208.11%20Addendum.pdf
+  - title: Version 9 Language Addendum
+    url: https://www.statmodel.com/download/AddendumV9.pdf
+  - title: Version 9.1 Language Addendum
+    url: https://www.statmodel.com/download/Addendum%209.1.pdf

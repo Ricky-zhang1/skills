@@ -1,0 +1,24 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mplusflow-venv/
+
+# Never publish research data or generated analysis projects.
+*.sav
+*.zsav
+*.dta
+*.xlsx
+*.xls
+*.csv
+*.dat
+*.out
+00_原始数据/
+01_数据检查/
+02_分析数据/
+03_Mplus代码/
+04_Mplus原始结果/
+05_分析结果/
+06_分析报告/
+07_参考依据/
+08_质量审查/

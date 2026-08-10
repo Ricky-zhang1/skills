@@ -23,6 +23,7 @@ This repository stores personal Claude Code skills focused on:
 | Skill | Description | Status |
 |-------|-------------|--------|
 | [configurational-literature-mapping](./configurational-literature-mapping/) | Transform niche research topics into theoretical hubs using QCA logic and truth table analysis | ✅ Available |
+| [mplus-automated-analysis-skill](./mplus-automated-analysis-skill/) | An AI-assisted Mplus workflow for data conversion, standard analysis, result export, and reporting | Alpha 9 |
 
 ### Installation
 
@@ -89,6 +90,7 @@ skill-name/
 | 技能 | 描述 | 状态 |
 |------|------|------|
 | [configurational-literature-mapping](./configurational-literature-mapping/) | 组态思维文献定位法 - 使用 QCA 逻辑和真值表分析，将小众研究主题转化为理论枢纽 | ✅ 可用 |
+| [mplus-automated-analysis-skill](./mplus-automated-analysis-skill/) | Mplus 自动化分析流程，覆盖数据转换、标准分析、结果导出与报告 | Alpha 9 |
 
 ### 安装方法
 
@@ -143,6 +145,7 @@ rm -rf temp-skills
 | Date | Skill | Changes |
 |------|-------|---------|
 | 2025-02-15 | configurational-literature-mapping | Initial release - 组态思维文献定位法 v1.0 |
+| 2026-08-10 | mplus-automated-analysis-skill | Initial Alpha 9 release |
 
 ---
 

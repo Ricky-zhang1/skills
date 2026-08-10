@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LPA分析设计清单",
+  "type": "object",
+  "required": ["分析类型", "数据文件", "剖面指标", "类别范围", "变量标准化", "内部缺失码"],
+  "properties": {
+    "分析类型": {"const": "LPA"},
+    "数据文件": {"type": "string"},
+    "用户ID变量": {"type": ["string", "null"]},
+    "剖面指标": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "类别范围": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "integer", "minimum": 1, "maximum": 10}
+    },
+    "变量标准化": {"type": "boolean"},
+    "低基数指标连续化确认": {"type": "boolean"},
+    "用户声明缺失码": {"type": "array"},
+    "内部缺失码": {"type": "number"},
+    "模板ID": {"const": "LPA-BASE-EV0"}
+  },
+  "additionalProperties": true
+}
