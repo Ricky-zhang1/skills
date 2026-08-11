@@ -42,20 +42,32 @@ def _read_text_table(
     path: Path,
     text_columns: list[str] | None = None,
     preserve_text_columns: list[str] | None = None,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, str]:
     encodings = ["utf-8-sig", "utf-8", "gb18030", "cp936", "latin1"]
     last_exc: Exception | None = None
     for enc in encodings:
         try:
             if text_columns:
-                return pd.read_csv(
-                    path, sep=None, engine="python", header=None, names=text_columns, encoding=enc,
-                    dtype={name: "string" for name in (preserve_text_columns or []) if name in text_columns},
+                preserve_indices = {
+                    index: "string"
+                    for index, name in enumerate(text_columns)
+                    if name in (preserve_text_columns or [])
+                }
+                frame = pd.read_csv(
+                    path, sep=None, engine="python", header=None, encoding=enc,
+                    dtype=preserve_indices,
                 )
+                if frame.shape[1] != len(text_columns):
+                    raise ValueError(
+                        f"无表头文本实际有 {frame.shape[1]} 列，但提供了 {len(text_columns)} 个变量名。"
+                        "已停止读取，防止首列被当成索引或全部变量错位。"
+                    )
+                frame.columns = text_columns
+                return frame, enc
             return pd.read_csv(
                 path, sep=None, engine="python", encoding=enc,
                 dtype={name: "string" for name in (preserve_text_columns or [])},
-            )
+            ), enc
         except Exception as exc:  # noqa: BLE001
             last_exc = exc
     raise ValueError(f"无法读取文本数据：{path.name}。请确认分隔符、编码和是否有表头。原始错误：{last_exc}")
@@ -86,9 +98,11 @@ def load_dataframe(
                             "请把该列在源文件中改为文本后重新导入。"
                         )
     elif ext == ".csv":
-        df = _read_text_table(path, preserve_text_columns=preserve_text_columns)
+        df, text_encoding = _read_text_table(path, preserve_text_columns=preserve_text_columns)
+        meta["文本编码"] = text_encoding
     elif ext in {".txt", ".dat", ".tsv"}:
-        df = _read_text_table(path, text_columns=text_columns, preserve_text_columns=preserve_text_columns)
+        df, text_encoding = _read_text_table(path, text_columns=text_columns, preserve_text_columns=preserve_text_columns)
+        meta["文本编码"] = text_encoding
     elif ext in {".sav", ".zsav", ".dta"}:
         try:
             import pyreadstat  # type: ignore
@@ -108,6 +122,8 @@ def load_dataframe(
                     getattr(rs_meta, "column_labels", []) or [],
                 )
             },
+            "用户缺失范围": getattr(rs_meta, "missing_ranges", {}) or {},
+            "用户缺失离散值": getattr(rs_meta, "missing_user_values", {}) or {},
         }
         for name in preserve_text_columns or []:
             if name in df.columns and pd.api.types.is_numeric_dtype(df[name]):
@@ -128,6 +144,62 @@ def load_dataframe(
     meta["行数"] = int(len(df))
     meta["列数"] = int(df.shape[1])
     return df, meta
+
+
+def write_verified_mplus_data(
+    frame: pd.DataFrame,
+    destinations: list[Path],
+    missing_value: float = INTERNAL_MISSING,
+) -> dict[str, Any]:
+    """Write numeric free-format data and verify the exact Mplus-facing structure."""
+    if frame.empty or frame.shape[1] < 2:
+        raise ValueError("Mplus 分析数据必须至少包含一行和两个字段（ROWID 与分析变量）。")
+    expected = frame.astype(float).fillna(float(missing_value)).to_numpy()
+    if not np.isfinite(expected).all():
+        raise ValueError("Mplus 分析数据含 NaN 以外的无穷值，已停止导出。")
+    result: dict[str, Any] | None = None
+    for destination in destinations:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        frame.to_csv(
+            destination,
+            sep=" ",
+            header=False,
+            index=False,
+            na_rep=str(int(missing_value)),
+            # 17 significant digits preserve an IEEE-754 double on text round-trip.
+            float_format="%.17g",
+            encoding="ascii",
+            lineterminator="\n",
+        )
+        raw = destination.read_bytes()
+        if not raw.isascii():
+            raise RuntimeError(f"Mplus 数据文件不是纯 ASCII：{destination.name}")
+        lines = [line for line in raw.splitlines() if line.strip()]
+        widths = [len(line.split()) for line in lines]
+        if len(lines) != len(frame) or any(width != frame.shape[1] for width in widths):
+            raise RuntimeError(
+                f"Mplus 数据导出结构核验失败：实际 {len(lines)} 行，期望 {len(frame)} 行；"
+                f"每行应有 {frame.shape[1]} 列。"
+            )
+        restored = np.asarray(
+            [[float(token) for token in line.decode("ascii").split()] for line in lines],
+            dtype=float,
+        )
+        if restored.shape != expected.shape or not np.array_equal(restored, expected):
+            raise RuntimeError("Mplus 数据导出回读值与转换前数据不一致，已停止运行以防变量错位。")
+        if not np.array_equal(restored[:, 0].astype(int), np.arange(1, len(frame) + 1)):
+            raise RuntimeError("Mplus 数据中的 ROWID 不连续，已停止运行以防个案错配。")
+        result = {
+            "状态": "通过",
+            "编码": "ASCII（纯数字）",
+            "行数": int(restored.shape[0]),
+            "列数": int(restored.shape[1]),
+            "每行列数一致": True,
+            "ROWID连续": True,
+            "数值回读一致": True,
+        }
+    assert result is not None
+    return result
 
 
 def _find_sentinel_values(series: pd.Series) -> list[float]:
@@ -199,6 +271,9 @@ def prepare_lpa_project(
             if newly_missing > 0:
                 raise ValueError(f"剖面指标“{var}”包含无法转换为数值的内容，标准 LPA 模块已停止。")
             work[var] = coerced
+        nonfinite = work[var].notna() & ~np.isfinite(pd.to_numeric(work[var], errors="coerce"))
+        if nonfinite.any():
+            raise ValueError(f"剖面指标“{var}”含 {int(nonfinite.sum())} 个无穷值，Mplus 无法可靠读取。")
         n_unique = int(work[var].nunique(dropna=True))
         if n_unique <= 1:
             raise ValueError(f"剖面指标“{var}”没有有效变异，不能进入 LPA。")
@@ -289,10 +364,9 @@ def prepare_lpa_project(
         warnings.append(f"有 {int(all_missing_mask.sum())} 个个案所有剖面指标均缺失，Mplus 可能不会将其纳入模型估计。")
 
     data_file = dirs["分析数据"] / "Mplus分析数据.dat"
-    analysis.to_csv(data_file, sep=" ", header=False, index=False, na_rep=str(int(INTERNAL_MISSING)), float_format="%.10g")
-    # 内部运行副本使用 ASCII 文件名。
+    # 内部运行副本使用 ASCII 文件名，内容只含 ASCII 数字。
     runtime_data = runtime_dir / "data.dat"
-    analysis.to_csv(runtime_data, sep=" ", header=False, index=False, na_rep=str(int(INTERNAL_MISSING)), float_format="%.10g")
+    export_check = write_verified_mplus_data(analysis, [data_file, runtime_data])
 
     size_advisory = sample_size_advisory("lpa", expected_mplus_n)
     spec = {
@@ -313,6 +387,7 @@ def prepare_lpa_project(
         "原始样本数": int(len(df)),
         "预计Mplus有效样本数": expected_mplus_n,
         "源数据元信息": source_meta,
+        "Mplus数据转换核验": export_check,
         "数据警告": warnings,
         "样本量提示": size_advisory,
     }
@@ -328,10 +403,13 @@ def prepare_lpa_project(
         f"- 预计 Mplus 有效样本数：{expected_mplus_n}",
         f"- 是否对指标做 Z 标准化：{'是' if standardize else '否'}",
         f"- 内部缺失码：{int(INTERNAL_MISSING)}",
+        f"- 数据转换核验：{export_check['状态']}；{export_check['行数']} 行 × {export_check['列数']} 列；{export_check['编码']}",
         "",
         "## 剖面指标",
         "",
     ]
+    if source_meta.get("文本编码"):
+        audit_lines.insert(4, f"- 识别到的源文本编码：{source_meta['文本编码']}")
     for _, row in variable_map.iterrows():
         audit_lines.append(
             f"- {row['原变量名']} → {row['Mplus内部变量名']}；非缺失 {row['非缺失数']}；缺失 {row['缺失数']}；唯一值 {row['唯一值数']}"

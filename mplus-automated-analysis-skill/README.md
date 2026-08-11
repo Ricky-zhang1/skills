@@ -1,6 +1,6 @@
 # Mplus自动化分析skill
 
-[![Release](https://img.shields.io/badge/release-v1.0beta-0f766e)](https://github.com/Ricky-zhang1/skills/releases/tag/v1.0beta)
+[![Version](https://img.shields.io/badge/version-v1.1beta-0f766e)](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
 [![License](https://img.shields.io/badge/license-MIT-2f855a)](./LICENSE)
 
 ![Mplus 自动化分析流程](./assets/mplus-analysis-workflow.png)
@@ -33,6 +33,7 @@
 - 常用分析代码来自登记过的 Mplus 官方示例和方法文献，报告会附上相应来源。
 - 数据转换、变量顺序和样本量会在运行前核对，模型输出会在运行后再核对一次。
 - LPA 与 LCA 会先比较不同类别数，再结合信息准则、类别规模、后验概率、模型检验和研究问题给出建议。
+- 拟合指数、样本量、信效度和类别判断会区分“文献参照”与“Skill 内部提醒线”，不把经验值写成统一发表门槛。
 - 原始数据保持不动。每次分析都有独立项目文件夹，代码和结果可以逐项回查。
 - 样本量偏小或模型估计出现问题时，报告会说明它对结果意味着什么，并给出可参考的处理方向。
 
@@ -75,13 +76,13 @@ https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill
 
 | 分析 | 当前用途 |
 | --- | --- |
-| 数据整理 | SAV、Excel、CSV、DTA、TXT 与 DAT 的读取、检查和转换 |
-| EFA 与 CFA | 连续或分类指标的探索性与验证性因子分析 |
-| SEM 与中介 | 结构方程模型、观测变量中介和潜变量中介 |
-| 基础线性增长 | 多波数据的基础潜在增长模型 |
+| 基础统计 | 描述统计、信度、差异检验、相关、多元回归与 Logistic 回归 |
+| 测量模型 | 连续/分类指标 EFA、CFA、测量质量提示；测量不变性为引导流程 |
+| 中介与调节 | 简单中介、链式中介、观测变量调节与有调节的中介 |
+| 结构与纵向 | SEM、基础 CLPM、基础线性潜增长 |
 | LPA | 连续指标的一到 K 类比较与类别归属导出 |
 | LCA | 分类指标的一到 K 类比较与类别归属导出 |
-| 进阶模型 | 测量不变性、多层、GMM、LCGA、LTA、RI-CLPM、ESEM 与复杂抽样的引导式支持 |
+| 多层与进阶模型 | 基础两层回归/SEM、跨层随机斜率；GMM/LCGA、LTA、RI-CLPM、ESEM、多水平 LPA 与复杂抽样进入引导或专家流程 |
 
 每个分析项目都会单独保存，原始数据保持不动。常见产物包括数据检查结果、变量对照表、Mplus 输入文件、原始输出、Excel 和 CSV 结果表，以及带方法依据的中文报告。
 
@@ -99,7 +100,7 @@ LPA 和 LCA 的报告会同时看信息准则、类别规模、后验概率、�
 
 ## 版本与反馈
 
-[下载最新版本](https://github.com/Ricky-zhang1/skills/releases/tag/v1.0beta)
+[查看 1.1beta 最新源码](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
 
 [查看更新记录](./CHANGELOG.md)
 [提交问题](https://github.com/Ricky-zhang1/skills/issues)
@@ -139,6 +140,7 @@ Mplus Automated Analysis Skill helps an AI Agent take a project from raw data to
 - Standard code is linked to registered Mplus examples and method references.
 - Data conversion, variable order, and sample size are checked before the run. Output is checked again afterwards.
 - LPA and LCA recommendations consider fit information, class size, posterior probabilities, model tests, and the research question.
+- Published method references, official Mplus syntax, and internal screening reminders are labeled separately so rules of thumb are not presented as universal publication cutoffs.
 - Every analysis uses a separate project folder and keeps the source data intact.
 
 ## Install and first run
@@ -158,7 +160,7 @@ Mplus needs to be installed and activated on the computer. After that, give the 
 
 ## Workflows
 
-It supports data preparation, EFA, CFA, SEM, observed and latent mediation, basic linear growth models, LPA, LCA, and guided support for measurement invariance, multilevel models, GMM, LCGA, LTA, RI-CLPM, ESEM and complex surveys.
+It supports descriptive statistics, reliability, group differences, correlations, multiple and logistic regression, EFA, CFA, SEM, mediation, moderation, serial and moderated mediation, basic CLPM and linear growth models, LPA, LCA, and confirmed two-level models. Measurement invariance, GMM/LCGA, LTA, RI-CLPM, ESEM, multilevel LPA and complex surveys use guided or expert workflows.
 
 Give the Agent a data file and a plain-language question. For example.
 
@@ -176,7 +178,7 @@ Each project keeps its source data intact and produces Mplus files, output, spre
 
 End-to-end testing has been completed on Apple Silicon Macs with Mplus 8.3. Windows, Intel Macs and other Mplus versions include setup detection and self-test support.
 
-[Latest release](https://github.com/Ricky-zhang1/skills/releases/tag/v1.0beta)
+[Latest 1.1beta source](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
 
 [Changelog](./CHANGELOG.md)
 [Issues](https://github.com/Ricky-zhang1/skills/issues)

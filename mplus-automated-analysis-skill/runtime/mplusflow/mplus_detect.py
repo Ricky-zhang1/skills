@@ -60,10 +60,19 @@ def version_profile(version: str | None) -> tuple[str, str]:
 def _compatibility(version: str | None, os_name: str, arch: str) -> tuple[str, str]:
     if not version:
         return "unverified", "无法读取 Mplus 版本；标准模式不得据此宣称版本兼容。"
-    major = int(version.split(".", 1)[0])
+    parsed = _version_tuple(version)
+    if parsed is None:
+        return "unverified", "Mplus 版本格式无法识别；标准模式不得据此宣称版本兼容。"
+    major, minor = parsed
     normalized_arch = arch.lower()
+    if (major, minor) == (8, 3) and os_name == "Darwin" and normalized_arch in {"arm64", "aarch64"}:
+        return "target", "Mac M 系列 + Mplus 8.3 是当前已完成真实运行回归的目标组合；每台用户电脑仍需通过本机自检。"
     if major in {8, 9} and os_name == "Darwin" and normalized_arch in {"arm64", "aarch64"}:
-        return "target", "Mac M 系列是当前主要目标环境；8.3 已在一台开发机实测，其他版本仍必须通过本机自检。"
+        return (
+            "provisional",
+            f"Mac M 系列是主要适配方向，但当前只有 Mplus 8.3 的真实运行记录；"
+            f"Mplus {version} 必须通过本机自检，且仍标记为未实机认证。",
+        )
     if major in {8, 9} and os_name in {"Darwin", "Windows"}:
         return "provisional", "已保留安装、路径和构建兼容，但当前没有该系统组合的真实 Mplus 验证记录。"
     if major == 7:

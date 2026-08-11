@@ -12,6 +12,14 @@ function Test-SupportedPython([string]$Python) {
     return $LASTEXITCODE -eq 0
 }
 
+function Test-RuntimeReady([string]$Python) {
+    if (-not $Python -or -not (Test-Path $Python) -or -not (Test-SupportedPython $Python)) {
+        return $false
+    }
+    & $Python -c "import numpy, openpyxl, pandas, pyreadstat" 2>$null
+    return $LASTEXITCODE -eq 0
+}
+
 if ($args.Count -gt 0 -and $args[0] -eq "bootstrap") {
     if ($args.Count -lt 2 -or $args[1] -ne "--yes") {
         Write-Error "环境尚未改动。请在用户明确同意后运行：.\scripts\运行Mplus分析.ps1 bootstrap --yes"
@@ -43,13 +51,22 @@ if ($args.Count -gt 0 -and $args[0] -eq "bootstrap") {
 }
 
 $VenvPython = Join-Path $Venv "Scripts\python.exe"
-if (Test-Path $VenvPython) {
+if (Test-RuntimeReady $VenvPython) {
     $Python = $VenvPython
 } else {
-    $Python = Get-PythonCommand
+    $Candidate = Get-PythonCommand
+    if (Test-RuntimeReady $Candidate) {
+        $Python = $Candidate
+    } else {
+        $Python = $null
+    }
 }
 if (-not $Python) {
-    Write-Error "未找到 Python。请让 Agent 征得你的同意后运行：.\scripts\运行Mplus分析.ps1 bootstrap --yes"
+    if (Get-PythonCommand) {
+        Write-Error "已找到 Python，但本 Skill 需要的数据读取依赖不齐。环境尚未改动。请让 Agent 说明用途并征得你的同意后运行：.\scripts\运行Mplus分析.ps1 bootstrap --yes"
+    } else {
+        Write-Error "未找到 Python 3.10+。环境尚未改动。请让 Agent 征得你的同意后运行：.\scripts\运行Mplus分析.ps1 bootstrap --yes"
+    }
     exit 2
 }
 

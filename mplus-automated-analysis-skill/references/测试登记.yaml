@@ -1,5 +1,5 @@
 registry_name: Mplus模板测试登记
-version: 1.0beta
+version: 1.1beta
 tests:
 - id: TEST-LPA-001
   template: LPA-BASE-EV0
@@ -107,3 +107,106 @@ multi_family_regressions:
   classes: [1, 2, 3, 4]
   expected_candidate: 3
   matrix: {os: macOS, arch: arm64, mplus: "8.3"}
+- id: TEST-PRELIMINARY-001
+  analysis: [DESCRIPTIVE, RELIABILITY, CORRELATION, DIFFERENCE]
+  status: passed-unit-and-synthetic-data
+  test_file: tests/test_preliminary.py
+  date: "2026-08-11"
+- id: TEST-REGRESSION-001
+  analysis: [REGRESSION, LOGISTIC]
+  status: passed-one-development-environment
+  outputs: [standardized-paths, odds-ratios, confidence-intervals]
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-MODERATION-001
+  analysis: [MODERATION, SERIAL-MEDIATION, MODERATED-MEDIATION]
+  status: passed-one-development-environment
+  outputs: [interaction-path, indirect-effects, conditional-indirect-effects, bootstrap-ci]
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-CLPM-001
+  analysis: CLPM
+  waves: 3
+  status: passed-one-development-environment
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-MULTILEVEL-001
+  analysis: [TWOLEVEL-REGRESSION, CROSSLEVEL-RANDOM-SLOPE]
+  status: passed-one-development-environment
+  clusters: 60
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-RUNTIME-UNIT-001
+  analysis: MULTI_FAMILY
+  status: passed
+  tests: 111
+  date: "2026-08-11"
+- id: TEST-NOVICE-DATA-001
+  analysis: [TEXT-ENCODING, ASCII-EXPORT, ROW-COLUMN-VALUE-ROUNDTRIP]
+  status: passed-unit-and-real-mplus
+  cases: [GB18030-source, Chinese-extra-columns, variable-order, sample-count]
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-NOVICE-MODELS-001
+  analysis: [SERIAL-MEDIATION, TWOLEVEL-REGRESSION]
+  status: passed-one-development-environment
+  cases: [Chinese-school-and-class-columns, string-cluster, within-between-variation]
+  observations: {serial_mediation: 300, multilevel: 180, clusters: 15}
+  matrix: {os: macOS, arch: arm64, mplus: "8.3", mplus_executable_arch: x86_64}
+  date: "2026-08-11"
+- id: TEST-MPLUS-EXPERT-AUDIT-001
+  analysis: [DATA-ROUNDTRIP, SERIAL-MEDIATION, MULTILEVEL, LCA, POST-RUN-CONTRACT, MISSING-CODES]
+  status: passed-after-fixes
+  fixes:
+  - 17-digit exact token roundtrip and non-finite rejection
+  - serial indirect path order and original-name mapping
+  - explicit GROUPMEAN/GRANDMEAN/NONE compilation
+  - LCA valid ROWID set with all-indicator-missing cases retained as unclassified
+  - actual Mplus variable-set and estimator contract
+  - variable-specific missing codes and confirmed valid sentinel values
+  real_runs:
+  - {analysis: SERIAL-MEDIATION, data: local-private-fixture, mplus: "8.3", status: passed}
+  - {analysis: MULTILEVEL, data: local-private-fixture, mplus: "8.3", status: passed}
+  - {analysis: LCA, n_input: 240, n_used: 239, classes: [1, 2], mplus: "8.3", status: passed}
+  privacy: 私有测试只保留分析类型和通过状态，不记录样本量、聚类数、变量名、研究背景或本机路径。
+  date: "2026-08-11"
+- id: TEST-MEASUREMENT-GATE-001
+  analysis: [EFA, CFA, SEM]
+  status: passed-unit-and-real-mplus
+  cases:
+  - single-factor-two-indicator-standard-CFA-rejected
+  - two-indicator-factor-warning-with-continuation
+  - df-zero-not-treated-as-perfect-fit
+  - minor-fit-deviation-kept-as-reference-only
+  - weak-loading-CR-AVE-and-discriminant-validity-diagnostics
+  - EFA-factor-solution-confirmation
+  - nonconvergence-overrides-continue-status
+  real_runs:
+  - {analysis: CFA, data: public-template-fixture, n: 300, mplus: "8.3", result: normal, measurement_gate: "可继续"}
+  - {analysis: CFA, data: deliberately-misspecified-public-fixture, n: 300, mplus: "8.3", result: nonconverged, measurement_gate: "先修正再解释"}
+  - {analysis: CFA, data: local-private-output-only, mplus: "8.3", result: fit-indices-conflict, measurement_gate: "可继续-with-reference-note"}
+  privacy: 只记录汇总验证结论；不将私有问卷、题项名或本机数据路径加入公开包。
+  date: "2026-08-11"
+- id: TEST-MAC-LAUNCHER-001
+  analysis: ENVIRONMENT
+  status: passed-local
+  case: 候选 Python 中首个缺依赖时继续寻找已就绪的 Python，不直接报 numpy 导入错误。
+  selected_python: Python-3.10-with-required-dependencies
+  doctor: environment-ready
+  date: "2026-08-11"
+- id: TEST-REFERENCE-CALIBRATION-001
+  analysis: [REFERENCE-REGISTRY, VERSION-BOUNDARY, CFA-CONTINUOUS, CFA-CATEGORICAL]
+  status: passed-unit-and-real-mplus
+  cases:
+  - rule-source-integrity
+  - corrected-Raykov-DOI
+  - continuous-ML-fit-reference-boundary
+  - WLSMV-fit-reference-boundary
+  - low-df-RMSEA-warning
+  - model-specific-sample-size-guidance
+  - Mplus-9.1-provisional-until-real-validation
+  real_runs:
+  - {analysis: CFA_CONTINUOUS, data: public-template-fixture, mplus: "8.3", result: normal, measurement_gate: "可继续"}
+  - {analysis: CFA_CATEGORICAL, data: public-template-fixture, mplus: "8.3", result: expected-nonconvergence, measurement_gate: "先修正再解释"}
+  note: 分类CFA的阻断依据是Mplus明确报告未收敛，不是机械拟合指数阈值。
+  date: "2026-08-11"

@@ -8,6 +8,10 @@ SOURCES = {
     "sem": "Wolf et al. (2013), https://doi.org/10.1177/0013164413495237",
     "mixture": "Tein et al. (2013), https://doi.org/10.1080/10705511.2013.824781",
     "multilevel": "Maas & Hox (2005), https://doi.org/10.1027/1614-2241.1.3.86",
+    "monte_carlo": (
+        "Mplus User's Guide Chapter 12 examples, https://www.statmodel.com/usersguide/chapter12.shtml; "
+        "MONTECARLO command, https://www.statmodel.com/HTML_UG/chapter19V8.htm"
+    ),
 }
 
 
@@ -16,32 +20,43 @@ def sample_size_advisory(analysis: str, sample_size: int, design: dict[str, Any]
     family = analysis.lower()
     design = design or {}
     if family in {"efa", "esem"}:
-        reference, complex_reference, source = 200, 300, SOURCES["factor"]
+        screening, source = 200, SOURCES["factor"]
         context = "共同度、载荷强度、因子数和每个因子的指标数都会改变所需样本量。"
+        evidence_limit = "MacCallum 等不支持一个适用所有 EFA 的固定最小 N。"
     elif family in {"lpa", "lca", "gmm", "lta"}:
-        reference, complex_reference, source = 300, 500, SOURCES["mixture"]
+        screening, source = 300, SOURCES["mixture"]
         context = "类别分离度、最小类别占比、指标质量和类别数通常比单一总样本量更重要。"
+        evidence_limit = "Tein 等的模拟不支持通用的 N=300 或 N=500 最小值。"
     elif family in {"multilevel", "complex-survey"}:
         clusters = design.get("cluster_count")
         warning = clusters is None or int(clusters) < 50
         return {
             "是否提示风险": warning,
             "当前样本量": int(sample_size),
-            "规划参考": "优先检查高层单位数；可先以至少 50 个高层单位作为规划参考，再按 ICC、效应量和模型复杂度做模拟功效分析。",
-            "说明": "总样本量不能替代高层单位数。该数字是规划提醒，不是拒绝运行的硬门槛。",
-            "依据": SOURCES["multilevel"],
+            "内部筛查线": "高层单位数 < 50 时触发提醒。",
+            "规划参考": (
+                "优先报告高层单位数，再按 ICC、效应量、随机效应和模型复杂度做模拟功效分析。"
+                "Maas & Hox (2005) 在其两层线性模型模拟条件下发现，50 或更少高层单位会使二层标准误出现偏差。"
+            ),
+            "说明": "总样本量不能替代高层单位数；50 是特定模拟结果和内部筛查线，不是所有多层模型的通用最小值，也不阻止用户继续运行。",
+            "依据": f"{SOURCES['multilevel']}; {SOURCES['monte_carlo']}",
         }
     else:
-        reference, complex_reference, source = 200, 300, SOURCES["sem"]
+        screening, source = 200, SOURCES["sem"]
         context = "自由参数、效应大小、指标可靠性、分布、缺失和估计量都会改变所需样本量。"
+        evidence_limit = "Wolf 等展示了 SEM 所需样本对模型与数据条件的强依赖，不支持通用 N=200/300 规则。"
 
-    warning = int(sample_size) < reference
+    warning = int(sample_size) < screening
     return {
         "是否提示风险": warning,
         "当前样本量": int(sample_size),
-        "规划参考": f"可先以 {reference} 作为基础模型的初步规划参考；复杂、分类、纵向或小类别情形可从 {complex_reference} 或更高样本量开始规划。",
-        "说明": f"{context} 最可靠的做法是依据预期效应和完整模型进行 Monte Carlo/模拟功效分析；这里的数字不是硬门槛。",
-        "依据": source,
+        "内部筛查线": f"N < {screening} 时触发样本量风险提醒。",
+        "规划参考": (
+            f"当前文献没有支持适用该分析家族所有模型的固定最小 N。"
+            "正式建议值应来自预实验/可靠文献中的预期参数，并在完整目标模型上做 Monte Carlo 或其他模拟功效分析。"
+        ),
+        "说明": f"{context} {evidence_limit} N={screening} 只是本 Skill 用来防止遗漏提醒的内部筛查线，不是硬门槛，不阻止运行。",
+        "依据": f"{source}; {SOURCES['monte_carlo']}",
     }
 
 
@@ -51,6 +66,7 @@ def advisory_markdown(advisory: dict[str, Any]) -> list[str]:
         f"### {level}",
         "",
         f"- 当前样本量：{advisory['当前样本量']}",
+        f"- 内部筛查线：{advisory['内部筛查线']}",
         f"- {advisory['规划参考']}",
         f"- {advisory['说明']}",
         f"- 参考依据：{advisory['依据']}",

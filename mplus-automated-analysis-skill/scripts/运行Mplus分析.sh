@@ -5,12 +5,36 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VENV="$ROOT/.mplusflow-venv"
 
 find_python() {
-  command -v python3.12 2>/dev/null || command -v python3 2>/dev/null || true
+  command -v python3.12 2>/dev/null || command -v python3 2>/dev/null || command -v python 2>/dev/null || true
 }
 
 ensure_supported_python() {
   local candidate="$1"
   "$candidate" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)'
+}
+
+runtime_ready() {
+  local candidate="$1"
+  [[ -x "$candidate" ]] || return 1
+  ensure_supported_python "$candidate" || return 1
+  "$candidate" -c 'import numpy, openpyxl, pandas, pyreadstat' >/dev/null 2>&1
+}
+
+find_ready_python() {
+  local candidates=()
+  local resolved=""
+  [[ -x "$VENV/bin/python" ]] && candidates+=("$VENV/bin/python")
+  for name in python3.12 python3 python; do
+    resolved="$(command -v "$name" 2>/dev/null || true)"
+    [[ -n "$resolved" ]] && candidates+=("$resolved")
+  done
+  for candidate in "${candidates[@]}"; do
+    if runtime_ready "$candidate"; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+  return 1
 }
 
 if [[ "${1:-}" == "bootstrap" ]]; then
@@ -43,13 +67,14 @@ if [[ "${1:-}" == "bootstrap" ]]; then
   exec "$VENV/bin/python" -m mplusflow doctor
 fi
 
-if [[ -x "$VENV/bin/python" ]]; then
-  PYTHON="$VENV/bin/python"
-else
-  PYTHON="$(find_python)"
-fi
+PYTHON="$(find_ready_python || true)"
 if [[ -z "$PYTHON" ]]; then
-  echo "未找到 Python。请让 Agent 征得你的同意后运行：./scripts/运行Mplus分析.sh bootstrap --yes" >&2
+  if [[ -n "$(find_python)" ]]; then
+    echo "已找到 Python，但本 Skill 需要的数据读取依赖不齐。" >&2
+  else
+    echo "未找到 Python 3.10+。" >&2
+  fi
+  echo "环境尚未改动。请让 Agent 说明用途并征得你的同意后运行：./scripts/运行Mplus分析.sh bootstrap --yes" >&2
   exit 2
 fi
 

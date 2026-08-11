@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1beta
+
+- Expanded the controlled runtime to preliminary statistics, regression, Logistic regression, moderation, serial and moderated mediation, basic CLPM, and confirmed two-level models.
+- Added measurement-quality guidance before downstream SEM, mediation, and profile analysis.
+- Calibrated fit, reliability, sample-size, invariance, longitudinal, LPA/LCA, and version rules against official Mplus documentation and peer-reviewed methods literature.
+- Added novice-focused checks for text encoding, variable order, long IDs, missing codes, multilevel centering, convergence, and saved-data joins.
+- Passed 111 automated tests and a fresh Apple Silicon plus Mplus 8.3 self-test.
+
 ## v1.0beta
 
 - First public beta release.

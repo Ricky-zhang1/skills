@@ -1,10 +1,18 @@
 registry_name: Mplus分析规则登记
-version: 0.2.0
+version: 1.1beta
 rules:
   - id: LPA-HARD-001
     type: hard_gate
     rule: 标准LPA指标必须为数值型连续变量；发现分类指标时阻止套用LPA基础模板。
     sources: [MPLUS-EX7.9, MASYN-2013]
+    note: “分类指标”来自变量的测量定义与研究者确认，不由唯一值数自动定义。
+
+  - id: LPA-SCREEN-001
+    type: internal_heuristic
+    rule: 指标的非缺失唯一值不超过 10 时暂停并请用户确认指标尺度；确认后可继续。
+    sources: [RHEMTULLA-ETAL-2012]
+    origin: 本Skill内部防误导筛查线
+    note: 10 不是文献通用分界值；不可仅凭类别数判定连续或分类处理。
 
   - id: DATA-HARD-001
     type: hard_gate
@@ -73,4 +81,24 @@ rules:
   - id: DATA-POLICY-001
     type: workflow_policy
     rule: 不默认Z标准化LPA指标。只有用户授权或研究设计明确要求时才标准化，并记录转换前后的变量映射与统计量。
-    sources: [MASYN-2013]
+    sources: []
+    origin: 分析设计透明性规则
+    note: 是否标准化取决于研究问题、量纲和希望类别反映绝对水平还是相对形状；不宣称 Masyn (2013) 规定了统一答案。
+
+  - id: FIT-REF-001
+    type: method_boundary
+    rule: CFI_TLI约.95_RMSEA约.06_SRMR约.08只作为连续数据ML情境下的历史定位参照，且应组合解读。
+    sources: [HU-BENTLER-1999, MARSH-HAU-WEN-2004]
+    note: 不得写成跨领域发表硬门槛。
+
+  - id: FIT-REF-002
+    type: method_boundary
+    rule: 有序分类指标使用WLSMV_DWLS时，不机械照搬连续数据ML的拟合阈值。
+    sources: [XIA-YANG-2019]
+
+  - id: SAMPLE-SIZE-001
+    type: internal_heuristic
+    rule: N=200_300等数字只作为Skill内部遗漏提醒线，不作为文献推荐的通用最小样本量。
+    sources: [MACCALLUM-ETAL-1999, WOLF-ETAL-2013, TEIN-COXE-CHAM-2013, MPLUS-UG-CH12, MPLUS-UG-MONTECARLO]
+    origin: 本Skill内部筛查线
+    note: 实际建议应基于预期参数和完整模型的模拟功效分析。

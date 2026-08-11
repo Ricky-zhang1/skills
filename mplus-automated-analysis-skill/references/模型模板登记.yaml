@@ -1,5 +1,5 @@
 registry_name: Mplus LPA模板与结构化编译来源登记
-version: 1.0beta
+version: 1.1beta
 policy:
   scope: LPA使用本登记中的受控模板；EFA、CFA、SEM、中介、增长和LCA由Runtime结构化编译器受控生成，运行时真值源为支持矩阵与COMPILED_FAMILIES。
   standard_mode_requirement: 所有标准模块都必须经过结构化输入校验、Mplus运行后反校验和本机环境验证；未在支持矩阵列为已接入的模型不得作为自动分析交付。

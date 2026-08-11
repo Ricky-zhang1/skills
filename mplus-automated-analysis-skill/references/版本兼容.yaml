@@ -1,6 +1,6 @@
 registry_name: Mplus版本适配登记
-version: 1.0beta
-last_checked: 2026-08-10
+version: 1.1beta
+last_checked: 2026-08-11
 official_current_version: "9.1"
 principle: 核心标准模板固定使用 Mplus 7+ 的共同语法；版本专属功能只在检测到满足版本后进入引导或专家路径，绝不静默写入旧版代码。
 profiles:
@@ -12,10 +12,10 @@ profiles:
     notes: 不依赖部分 7.x 安装中缺失的分类 logits 或后续版本新增输出；高级三步法、BCH、LTA 等须逐个核对小版本与官方示例。
   v8_0_8_3:
     range: "8.0-8.3"
-    runtime_status: target_on_macos_arm64_self_test_required
+    runtime_status: 8.3_target_on_macos_arm64_8.0_8.2_provisional
     parser: v8-compatible
     core: [EFA, CFA, SEM, mediation, linear-growth, LPA, LCA]
-    notes: 当前实机记录为 macOS Apple Silicon 加 8.3；RDSEM 和时间序列功能不进入标准模式。
+    notes: 当前实机记录仅为 macOS Apple Silicon 加 8.3；8.0-8.2 仍是 provisional。RDSEM 和时间序列功能不进入标准模式。
   v8_4_8_8:
     range: "8.4-8.8"
     runtime_status: provisional_self_test_required
@@ -33,9 +33,9 @@ profiles:
     notes: 多步 mixture、两层 Bootstrap、PSEM 扩展、VIF 等可用；仍只作为引导或专家功能。
   v9_1:
     range: "9.1"
-    runtime_status: target_on_macos_arm64_self_test_required
+    runtime_status: provisional_self_test_required
     parser: v9.1-compatible
-    notes: SEFA/DSEFA 和新版并列 ESEM 输出可用；当前 ESEM 尚未自动交付，解析器不把新输出误当成普通 EFA。
+    notes: 官方已提供 SEFA/DSEFA 和新版并列 ESEM 输出；本 Skill 尚无 9.1 实机回归，ESEM 也未自动交付，不得标为 target。
   future:
     range: ">=10"
     runtime_status: unverified

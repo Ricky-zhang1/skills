@@ -54,6 +54,13 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--output", required=True, help="新的数据画像目录")
     inspect.add_argument("--text-columns", default=None, help="无表头 TXT/DAT 的列名")
 
+    preliminary = sub.add_parser("preliminary", help="执行描述统计、信度、相关或差异分析")
+    preliminary.add_argument("--spec", required=True, help="初步统计设计 JSON")
+    preliminary.add_argument("--data", required=True, help="数据文件")
+    preliminary.add_argument("--output", required=True, help="新的输出目录")
+    preliminary.add_argument("--missing", default=None, help="特殊缺失码，逗号分隔")
+    preliminary.add_argument("--text-columns", default=None, help="无表头 TXT/DAT 的列名")
+
     run_spec = sub.add_parser("run-spec", help="根据结构化 JSON 设计执行非 LPA 标准分析")
     run_spec.add_argument("--spec", required=True, help="分析设计 JSON")
     run_spec.add_argument("--data", required=True, help="数据文件")
@@ -109,6 +116,19 @@ def main(argv: list[str] | None = None) -> int:
             result = inspect_dataset(
                 args.data, args.output,
                 parse_csv_list(args.text_columns) if args.text_columns else None,
+            )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0
+
+        if args.command == "preliminary":
+            from .preliminary import run_preliminary
+            from .standard_pipeline import load_design
+            result = run_preliminary(
+                design=load_design(args.spec),
+                input_path=args.data,
+                output_dir=args.output,
+                missing_codes=parse_number_list(args.missing),
+                text_columns=parse_csv_list(args.text_columns) if args.text_columns else None,
             )
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0

@@ -6,6 +6,7 @@ import sys
 
 REQUIRED_PACKAGES = {
     "pandas": "pandas",
+    "scipy": "scipy",
     "openpyxl": "openpyxl",
     "xlrd": "xlrd",
     "pyreadstat": "pyreadstat",

@@ -2,9 +2,11 @@
 
 ## 适配原则
 
-本 Skill 不为每个版本复制一套基础 `.inp`。已自动化的 EFA、CFA、SEM、中介、基础线性增长、LPA 和 LCA 使用 Mplus 7+ 的共同语言子集：`DATA`、`VARIABLE`、`ANALYSIS`、`MODEL`、`OUTPUT`、`SAVEDATA`、`TECH11` 与 `TECH14`。运行时根据实际版本选择输出解析配置，并只在版本满足条件时提示可用的高级功能。
+本 Skill 不为每个版本复制一套基础 `.inp`。已自动化的 EFA、CFA、回归、Logistic、SEM、中介、观测变量调节、基础 CLPM、基础线性增长、LPA 和 LCA 使用 Mplus 7+ 的共同语言子集。基础两层模型使用 Chapter 9 的 `TYPE=TWOLEVEL` 或 `TYPE=TWOLEVEL RANDOM`。运行时根据实际版本选择输出解析配置，并只在版本满足条件时提示可用的高级功能。
 
 这意味着“版本较新”不会让 Agent 擅自把新语法塞进旧模型；“版本较旧”也不会仅因版本号被拒绝生成可复现的核心代码。实际运行仍由本机自检和 Mplus 输出决定。
+
+“语法可兼容”和“已实机验证”是两件事。目前只有 **macOS Apple Silicon + Mplus 8.3** 是 target 组合；其他 8.x/9.x 即使可使用共同语法，仍属 provisional，必须先做本机自检，不得写成“已适配认证”。
 
 ## 版本差异与处理
 

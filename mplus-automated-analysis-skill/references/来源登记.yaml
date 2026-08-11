@@ -1,22 +1,27 @@
 registry_name: Mplus分析来源登记
-version: 0.2.0
-last_verified: 2026-08-10
+version: 1.1beta
+last_verified: 2026-08-11
 policy:
   authority_order:
   - Mplus官方用户手册与官方示例
   - Mplus官方Web Notes与专题资料
   - 同行评议的方法论文与权威手册章节
   - 成熟开源工程实现
-  note: GitHub工程只能用于自动化实现参考，不能单独作为统计规范依据。
+  claim_types:
+    official_syntax: 用于证明 Mplus 的命令、默认值、版本功能和输出格式。
+    method_evidence: 用于证明统计方法的条件、性能与解释边界。
+    internal_heuristic: 只用于触发提醒，必须明示为 Skill 内部筛查线，不得冒充文献阈值。
+  note: Mplus 官方资料是语法与软件行为的一级来源，但“软件可以运行”不等于“方法适合当前研究”。GitHub工程只能用于自动化实现参考。
 sources:
-- id: MPLUS-HOME-9.1
+- id: MPLUS-VERSION-HISTORY
   level: 官方
-  title: Mplus Version 9.1 / Mplus Home Page
-  url: https://www.statmodel.com/
+  title: Mplus Version History
+  url: https://www.statmodel.com/verhistory.shtml
   use_for:
   - 当前版本识别
-  - 功能范围
-  checked: 2026-08-10
+  - 8.x与9.x功能变化
+  limitation: 以带日期的版本条目为准；页面个别总述句可能滞后于后续发布条目。
+  checked: 2026-08-11
 - id: MPLUS-UG-CH3
   level: 官方
   title: Mplus User's Guide Examples - Chapter 3 Regression and Path Analysis
@@ -26,6 +31,9 @@ sources:
   - 路径分析
   - 中介效应
   - Bootstrap间接效应候选模板
+  - 多元回归
+  - Logistic回归
+  - 调节与有调节的中介
   checked: '2026-08-10'
 - id: MPLUS-UG-CH4
   level: 官方
@@ -77,6 +85,31 @@ sources:
   - 多层模型候选模板
   - 两层CFA/SEM
   checked: 2026-08-10
+- id: MPLUS-UG-CH10
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 10 Multilevel Mixture Modeling
+  url: https://www.statmodel.com/usersguide/chapter10.shtml
+  use_for:
+  - 多水平LPA/LCA
+  - 两层增长混合模型
+  checked: 2026-08-11
+- id: MPLUS-EX3.18
+  level: 官方
+  title: Example 3.18 - Moderated mediation with a plot of the indirect effect
+  url: https://www.statmodel.com/usersguide/chap3/ex3.18.html
+  use_for:
+  - 观测变量调节
+  - 有调节的中介
+  - MODEL CONSTRAINT
+  checked: 2026-08-11
+- id: MPLUS-MEDIATION-TOPIC
+  level: 官方专题
+  title: Mplus Mediation Analysis Topic Page
+  url: https://www.statmodel.com/Mediation.shtml
+  use_for:
+  - 中介与条件间接效应
+  - 跨层调节
+  checked: 2026-08-11
 - id: MPLUS-UG-CH7
   level: 官方
   title: Mplus User's Guide Examples - Chapter 7 Mixture Modeling with Cross-Sectional
@@ -117,12 +150,13 @@ sources:
   level: 官方方法
   title: Asparouhov & Muthén (2012) Using Mplus TECH11 and TECH14 to test the number
     of latent classes
-  url: https://www.statmodel.com/examples/webnote.shtml
+  url: https://www.statmodel.com/examples/webnotes/webnote14.pdf
   use_for:
   - TECH11
   - TECH14
   - 随机起始值与BLRT稳定性流程
-  checked: 2026-08-10
+  limitation: 论文中的 STARTS/LRTSTARTS 数值是特定示例和版本下的过程，不是通用神奇数字；核心是复现最优 loglikelihood 并核验 k-1 模型。
+  checked: 2026-08-11
 - id: MPLUS-LANGUAGE
   level: 官方
   title: A summary of the Mplus language
@@ -151,6 +185,35 @@ sources:
   - IDVARIABLE
   - SAVEDATA读取注意事项
   checked: 2026-08-10
+- id: MPLUS-UG-MONTECARLO
+  level: 官方
+  title: Mplus User's Guide - MONTECARLO Command
+  url: https://www.statmodel.com/HTML_UG/chapter19V8.htm
+  use_for:
+  - MONTECARLO命令语法
+  - 模型特定功效模拟的参数设定
+  limitation: Monte Carlo 结果取决于输入的效应量、缺失、分布和模型设定；Skill 不得替用户凭空设定这些参数。
+  checked: 2026-08-11
+- id: MPLUS-UG-CH12
+  level: 官方
+  title: Mplus User's Guide Examples - Chapter 12 Monte Carlo Simulation Studies
+  url: https://www.statmodel.com/usersguide/chapter12.shtml
+  use_for:
+  - CFA与潜增长模型的Monte_Carlo示例
+  - 增长混合、多层和中介模型的模拟示例
+  - 基于实际估计值设定总体参数
+  limitation: 示例说明如何模拟，不会自动为用户的研究提供效应量或通用最小样本量。
+  checked: 2026-08-11
+- id: MPLUS-UG-AUXILIARY
+  level: 官方
+  title: Mplus User's Guide - AUXILIARY, R3STEP and BCH
+  url: https://www.statmodel.com/HTML_UG/chapter15V8.htm
+  use_for:
+  - 混合模型协变量 R3STEP
+  - 连续远端结果 BCH
+  - 分类远端结果 DCATEGORICAL
+  limitation: 不同 auxiliary 设定回答不同问题；不得把最可能类别直接当成无误差观测分组。
+  checked: 2026-08-11
 - id: NYLUND-2007
   level: 方法论文
   title: Nylund, Asparouhov & Muthén (2007) Deciding on the Number of Classes in Latent
@@ -183,3 +246,162 @@ sources:
   - SAVEDATA解析工程思路
   restriction: 不作为统计模型规范的独立依据
   checked: 2026-08-10
+- id: ANDERSON-GERBING-1988
+  level: 方法论文
+  title: Anderson & Gerbing (1988) Structural Equation Modeling in Practice
+  doi: 10.1037/0033-2909.103.3.411
+  url: https://doi.org/10.1037/0033-2909.103.3.411
+  use_for: [CFA与SEM的两步建模]
+  limitation: 两步法不是将拟合指标变成硬门槛；测量模型不理想时要降低结构路径的解释强度。
+  checked: 2026-08-11
+- id: BOLLEN-1989
+  level: 权威专著
+  title: Bollen (1989) Structural Equations with Latent Variables
+  doi: 10.1002/9781118619179
+  url: https://doi.org/10.1002/9781118619179
+  use_for: [潜变量模型识别, 单题和两题因子的边界]
+  limitation: 指标数不能脱离整个模型的尺度设定、约束和可识别性单独判断。
+  checked: 2026-08-11
+- id: BROWN-2015
+  level: 权威专著
+  title: Brown (2015) Confirmatory Factor Analysis for Applied Research, 2nd ed.
+  url: https://www.guilford.com/books/Confirmatory-Factor-Analysis-for-Applied-Research/Timothy-Brown/9781462515363
+  use_for: [CFA识别与拟合解释, 两题因子, 载荷与不当解诊断]
+  limitation: 应用建议需与具体模型和输出结合；不把题项数或载荷经验数当成通用发表门槛。
+  checked: 2026-08-11
+- id: HU-BENTLER-1999
+  level: 方法模拟论文
+  title: Hu & Bentler (1999) Cutoff Criteria for Fit Indexes
+  doi: 10.1080/10705519909540118
+  url: https://doi.org/10.1080/10705519909540118
+  use_for: [连续数据ML估计下的两指标拟合参照]
+  limitation: 研究核心是 ML-SRMR 与另一指标的组合策略；不支持将 CFI/TLI=.95、RMSEA=.06、SRMR=.08 分别当成适用于所有估计量和数据类型的发表门槛。
+  checked: 2026-08-11
+- id: MARSH-HAU-WEN-2004
+  level: 方法论文
+  title: Marsh, Hau & Wen (2004) In Search of Golden Rules
+  doi: 10.1207/S15328007SEM1103_2
+  url: https://doi.org/10.1207/S15328007SEM1103_2
+  use_for: [防止过度概括拟合阈值]
+  limitation: 用于约束解释，不是另一套新阈值。
+  checked: 2026-08-11
+- id: XIA-YANG-2019
+  level: 方法模拟论文
+  title: Xia & Yang (2019) RMSEA, CFI, and TLI with Ordered Categorical Data
+  doi: 10.3758/s13428-018-1055-2
+  url: https://doi.org/10.3758/s13428-018-1055-2
+  use_for: [有序分类数据与WLSMV_DWLS拟合指标边界]
+  limitation: DWLS/ULS 在其条件下可产生更小 RMSEA 和更大 CFI/TLI；连续数据 ML 的常用 cutoff 不能机械照搬。
+  checked: 2026-08-11
+- id: KENNY-KANISKAN-MCCOACH-2015
+  level: 方法模拟论文
+  title: Kenny, Kaniskan & McCoach (2015) RMSEA with Small Degrees of Freedom
+  doi: 10.1177/0049124114543236
+  url: https://doi.org/10.1177/0049124114543236
+  use_for: [低自由度模型的RMSEA警示]
+  limitation: 低自由度下 RMSEA 可能对样本波动过度敏感；不应独立作为否决依据。
+  checked: 2026-08-11
+- id: FORNELL-LARCKER-1981
+  level: 方法论文
+  title: Fornell & Larcker (1981) Evaluating Structural Equation Models
+  doi: 10.2307/3151312
+  url: https://doi.org/10.2307/3151312
+  use_for: [AVE参照, Fornell_Larcker区分效度描述]
+  limitation: AVE=.50 和 sqrt_AVE 比较只是测量证据的一部分；Fornell-Larcker 通过不能单独证明区分效度。
+  checked: 2026-08-11
+- id: RONKKO-CHO-2022
+  level: 方法论文
+  title: Rönkkö & Cho (2022) An Updated Guideline for Assessing Discriminant Validity
+  doi: 10.1177/1094428120968614
+  url: https://doi.org/10.1177/1094428120968614
+  use_for: [Fornell_Larcker判据的局限]
+  limitation: 用于防止将单一经验判据当成区分效度证明。
+  checked: 2026-08-11
+- id: RAYKOV-1997
+  level: 方法论文
+  title: Raykov (1997) Estimation of Composite Reliability for Congeneric Measures
+  doi: 10.1177/01466216970212006
+  url: https://doi.org/10.1177/01466216970212006
+  use_for: [同源测量的复合信度]
+  limitation: 复合信度的计算依赖正确测量模型；交叉载荷、相关残差和分类指标需要与当前公式匹配的专门计算。
+  checked: 2026-08-11
+- id: MCNEISH-2018
+  level: 方法论文
+  title: McNeish (2018) Thanks Coefficient Alpha, We'll Take It From Here
+  doi: 10.1037/met0000144
+  url: https://doi.org/10.1037/met0000144
+  use_for: [Cronbach_alpha假设与局限, 替代信度估计]
+  limitation: 不用 alpha 或 omega 的单个数值证明单维性或效度。
+  checked: 2026-08-11
+- id: FABRIGAR-ETAL-1999
+  level: 方法论文
+  title: Fabrigar et al. (1999) Evaluating the Use of EFA
+  doi: 10.1037/1082-989X.4.3.272
+  url: https://doi.org/10.1037/1082-989X.4.3.272
+  use_for: [EFA提取方法, 旋转, 因子数, 载荷解释]
+  limitation: 不提供一条可脱离数据与理论的载荷删题线。
+  checked: 2026-08-11
+- id: HORN-1965
+  level: 方法论文
+  title: Horn (1965) Parallel Analysis
+  doi: 10.1007/BF02289447
+  url: https://doi.org/10.1007/BF02289447
+  use_for: [平行分析与因子保留]
+  limitation: 平行分析应与碎石图、模型拟合、载荷和实质可解释性结合。
+  checked: 2026-08-11
+- id: MACCALLUM-ETAL-1999
+  level: 方法模拟论文
+  title: MacCallum et al. (1999) Sample Size in Factor Analysis
+  doi: 10.1037/1082-989X.4.1.84
+  url: https://doi.org/10.1037/1082-989X.4.1.84
+  use_for: [EFA样本量规划]
+  limitation: 不支持固定的通用 N；所需样本受共同度、因子过度决定程度等影响。
+  checked: 2026-08-11
+- id: WOLF-ETAL-2013
+  level: 方法模拟论文
+  title: Wolf et al. (2013) Sample Size Requirements for SEM
+  doi: 10.1177/0013164413495237
+  url: https://doi.org/10.1177/0013164413495237
+  use_for: [CFA_SEM样本量的模型特定性]
+  limitation: 文章不提供适用所有 SEM 的固定 200 或 300 阈值。
+  checked: 2026-08-11
+- id: TEIN-COXE-CHAM-2013
+  level: 方法模拟论文
+  title: Tein, Coxe & Cham (2013) Power to Detect the Correct Number of Classes in LPA
+  doi: 10.1080/10705511.2013.824781
+  url: https://doi.org/10.1080/10705511.2013.824781
+  use_for: [LPA样本量与类别分离的关系]
+  limitation: 不支持固定的通用 N=300/500；类别分离、类别比例和指标质量会改变功效。
+  checked: 2026-08-11
+- id: MAAS-HOX-2005
+  level: 方法模拟论文
+  title: Maas & Hox (2005) Sufficient Sample Sizes for Multilevel Modeling
+  doi: 10.1027/1614-2241.1.3.86
+  url: https://doi.org/10.1027/1614-2241.1.3.86
+  use_for: [两层线性模型的高层单位数提醒]
+  limitation: 50 个高层单位是其模拟条件下关于二层标准误偏差的参照，不是所有多层 SEM、随机斜率或分类结果的通用最小值。
+  checked: 2026-08-11
+- id: PUTNICK-BORNSTEIN-2016
+  level: 方法综述
+  title: Putnick & Bornstein (2016) Measurement Invariance Conventions and Reporting
+  doi: 10.1016/j.dr.2016.06.004
+  url: https://doi.org/10.1016/j.dr.2016.06.004
+  use_for: [跨组与纵向测量不变性]
+  limitation: 比较潜均值通常需要截距或阈值不变；比较结构关系的最低要求与均值比较不完全相同，并存在部分不变性情形。
+  checked: 2026-08-11
+- id: HAMAKER-ETAL-2015
+  level: 方法论文
+  title: Hamaker, Kuiper & Grasman (2015) A Critique of the CLPM
+  doi: 10.1037/a0038889
+  url: https://doi.org/10.1037/a0038889
+  use_for: [CLPM与RI_CLPM解释差异]
+  limitation: RI-CLPM 通过随机截距分离稳定个体间差异和个体内波动；但它不会因为是纵向模型就自动获得因果解释。
+  checked: 2026-08-11
+- id: RHEMTULLA-ETAL-2012
+  level: 方法模拟论文
+  title: Rhemtulla, Brosseau-Liard & Savalei (2012) Treating Categorical Variables as Continuous
+  doi: 10.1037/a0029315
+  url: https://doi.org/10.1037/a0029315
+  use_for: [Likert和有序题项的连续_分类处理选择]
+  limitation: 类别数只是选择估计方法的一部分；还要看阈值分布、偏态、样本量和待估参数。
+  checked: 2026-08-11
