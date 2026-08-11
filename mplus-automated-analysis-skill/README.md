@@ -1,6 +1,6 @@
 # Mplus自动化分析skill
 
-[![Version](https://img.shields.io/badge/version-v1.1beta-0f766e)](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
+[![Version](https://img.shields.io/badge/version-v1.1beta-0f766e)](https://github.com/Ricky-zhang1/skills/releases/tag/v1.1beta)
 [![License](https://img.shields.io/badge/license-MIT-2f855a)](./LICENSE)
 
 ![Mplus 自动化分析流程](./assets/mplus-analysis-workflow.png)
@@ -100,7 +100,7 @@ LPA 和 LCA 的报告会同时看信息准则、类别规模、后验概率、�
 
 ## 版本与反馈
 
-[查看 1.1beta 最新源码](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
+[下载 1.1beta 轻量包](https://github.com/Ricky-zhang1/skills/releases/tag/v1.1beta)
 
 [查看更新记录](./CHANGELOG.md)
 [提交问题](https://github.com/Ricky-zhang1/skills/issues)
@@ -178,7 +178,7 @@ Each project keeps its source data intact and produces Mplus files, output, spre
 
 End-to-end testing has been completed on Apple Silicon Macs with Mplus 8.3. Windows, Intel Macs and other Mplus versions include setup detection and self-test support.
 
-[Latest 1.1beta source](https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill)
+[Download the 1.1beta lightweight package](https://github.com/Ricky-zhang1/skills/releases/tag/v1.1beta)
 
 [Changelog](./CHANGELOG.md)
 [Issues](https://github.com/Ricky-zhang1/skills/issues)
