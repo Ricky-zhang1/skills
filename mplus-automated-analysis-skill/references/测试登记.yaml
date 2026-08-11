@@ -1,5 +1,5 @@
 registry_name: Mplus模板测试登记
-version: 0.3.0-alpha.9
+version: 1.0beta
 tests:
 - id: TEST-LPA-001
   template: LPA-BASE-EV0

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0beta
+
+- First public beta release.
+- Simplified installation into one message that users can send to any Skill-capable Agent.
+- Added a short explanation of the workflow and how the Skill checks each analysis.
+
 ## v0.3.0-alpha.9
 
 - First public GitHub release.

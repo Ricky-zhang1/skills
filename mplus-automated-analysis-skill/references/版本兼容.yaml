@@ -1,5 +1,5 @@
 registry_name: Mplus版本适配登记
-version: 0.3.0-alpha.9
+version: 1.0beta
 last_checked: 2026-08-10
 official_current_version: "9.1"
 principle: 核心标准模板固定使用 Mplus 7+ 的共同语法；版本专属功能只在检测到满足版本后进入引导或专家路径，绝不静默写入旧版代码。

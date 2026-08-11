@@ -4,9 +4,9 @@ description: 面向论文和实证研究的 Mplus 分析 Skill。重点支持通
 license: MIT
 metadata:
   author: Mplus Analysis Skill Contributors
-  version: "0.3.0-alpha.9"
+  version: "1.0beta"
   language: zh-CN
-  status: development
+  status: beta
   requirements: "本机已安装 Mplus；轻量 Skill 不内置 Python 二进制，Agent 使用可用的 Python 3.10+ 并按需准备 runtime/requirements.txt 中的依赖；不要求 MCP"
 ---
 
