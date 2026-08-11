@@ -9,49 +9,20 @@
 
 适合写学位论文、课程论文和小型实证研究，也适合把一份旧的 Mplus 分析重新整理一遍。
 
-## 安装
+## 安装和第一次使用
 
-### Codex
-
-在 Codex 中输入下面这句。
+把下面整段复制给你正在使用的 Agent。Codex、Claude Code、WorkBuddy 和其他支持 Skill 的 Agent 都用这一段。
 
 ```text
-$skill-installer install https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill
+请从 GitHub 安装并启用这个 Skill。
+https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill
+
+请自行选择适合当前平台的安装方式，下载完整 Skill 并完成部署。安装完成后，检查这个 Skill 是否已经可以使用。
+
+然后检测我电脑上的 Mplus、Python 和读取 SAV、Excel、CSV、DTA、TXT、DAT 所需组件。请先自动查找 Mplus。只有找不到时，再问我它的安装位置。缺少组件时，先告诉我准备安装什么，得到我的确认后再安装。最后完成一次自检，并告诉我结果。
 ```
 
-安装完成后重启 Codex。手动安装时，把整个 `mplus-automated-analysis-skill` 文件夹放进 `~/.codex/skills/`。
-
-### Claude Code
-
-下载或克隆本仓库，把整个 `mplus-automated-analysis-skill` 文件夹放进 `~/.claude/skills/`，然后重启 Claude Code。
-
-### 其他 Agent
-
-在平台的 Skill 或插件导入界面选择整个文件夹。导入时请保留 `SKILL.md`、`references`、`runtime`、`scripts` 和 `assets`。
-
-## 第一次使用
-
-电脑需要已经安装可正常使用的 Mplus。打开 Agent 后，先说。
-
-```text
-请检测我电脑上的 Mplus 和运行环境，完成一次自检。
-```
-
-Skill 会先自动查找 Mplus。找不到时，它会再问你安装位置。Python 和读写 SAV、Excel、CSV、DTA 所需的组件也会一并检查，缺少时会说明用途并询问是否安装。
-
-你通常不需要自己打开终端。想手动检查时，可运行下面的命令。
-
-macOS
-
-```bash
-./scripts/运行Mplus分析.sh doctor
-```
-
-Windows PowerShell
-
-```powershell
-.\scripts\运行Mplus分析.ps1 doctor
-```
+电脑需要已经安装并激活 Mplus。之后只要把数据文件和研究问题交给 Agent 即可。
 
 ## 怎样开始
 
@@ -118,29 +89,20 @@ LPA 和 LCA 的报告会同时看信息准则、类别规模、后验概率、�
 
 Mplus Automated Analysis Skill helps an AI Agent take a project from raw data to a usable Mplus result. It prepares SAV, Excel, CSV, DTA, TXT, DAT and related files, creates Mplus syntax, runs local Mplus, and organizes Excel, CSV and report outputs.
 
-## Install
+## Install and first run
 
-### Codex
-
-```text
-$skill-installer install https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill
-```
-
-Restart Codex after installation. For a manual installation, copy the complete `mplus-automated-analysis-skill` folder to `~/.codex/skills/`.
-
-### Claude Code and other agents
-
-Copy or import the complete folder through the platform's Skill interface. Claude Code users can place it in `~/.claude/skills/`. Keep `SKILL.md`, `references`, `runtime`, `scripts` and `assets` together.
-
-## First run
-
-Install and activate Mplus on your computer, then ask the Agent.
+Copy this message into your AI Agent. It works for Codex, Claude Code, WorkBuddy, and other Agents that support Skills.
 
 ```text
-Please find Mplus on this computer, check the required environment, and run a self-test.
+Please install and enable this Skill from GitHub.
+https://github.com/Ricky-zhang1/skills/tree/main/mplus-automated-analysis-skill
+
+Choose the installation method that fits your current platform, download the complete Skill, and deploy it. Confirm that the Skill is available after installation.
+
+Then check this computer for Mplus, Python, and the components needed to read SAV, Excel, CSV, DTA, TXT, and DAT files. Look for Mplus automatically first. Ask me for its location only when you cannot find it. Tell me what needs to be installed and wait for my approval before installing anything. Finish with a self-test and report the result.
 ```
 
-The Skill looks for Mplus automatically and asks for a location only when needed. It also checks the Python components used to read common data files.
+Mplus needs to be installed and activated on the computer. After that, give the Agent your data file and research question.
 
 ## Workflows
 
